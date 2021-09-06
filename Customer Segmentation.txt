@@ -1,0 +1,122 @@
+Import the essential packages required for this role and then read our data:
+
+customer_data=read.csv("/home/dataflair/Mall_Customers.csv")
+str(customer_data)
+names(customer_data)
+
+We will now display the first six rows of our dataset using the head() function and use the summary() function to output summary of it:
+
+head(customer_data)
+summary(customer_data$Age)
+
+sd(customer_data$Age)
+summary(customer_data$Annual.Income..k..)
+sd(customer_data$Annual.Income..k..)
+summary(customer_data$Age)
+
+sd(customer_data$Spending.Score..1.100.)
+
+Customer Gender Visualization:
+In this, we will create a barplot and a piechart to show the gender distribution across our customer_data dataset.
+
+a=table(customer_data$Gender)
+barplot(a,main="Using BarPlot to display Gender Comparision",
+       ylab="Count",
+       xlab="Gender",
+       col=rainbow(2),
+       legend=rownames(a))
+
+Now, let us visualize a pie chart to observe the ratio of male and female distribution:
+
+pct=round(a/sum(a)*100)
+lbs=paste(c("Female","Male")," ",pct,"%",sep=" ")
+library(plotrix)
+pie3D(a,labels=lbs,
+   main="Pie Chart Depicting Ratio of Female and Male")
+
+Visualization of Age Distribution
+Let us plot a histogram to view the distribution to plot the frequency of customer ages. We will first proceed by taking summary of the Age variable:
+
+summary(customer_data$Age)
+
+hist(customer_data$Age,
+    col="blue",
+    main="Histogram to Show Count of Age Class",
+    xlab="Age Class",
+    ylab="Frequency",
+    labels=TRUE)
+
+boxplot(customer_data$Age,
+       col="ff0066",
+       main="Boxplot for Descriptive Analysis of Age")
+
+Analysis of the Annual Income of the Customers
+In this section of the R project, we will create visualizations to analyze the annual income of the customers. We will plot a histogram and then we will proceed to examine this data using a density plot.
+
+summary(customer_data$Annual.Income..k..)
+hist(customer_data$Annual.Income..k..,
+  col="#660033",
+  main="Histogram for Annual Income",
+  xlab="Annual Income Class",
+  ylab="Frequency",
+  labels=TRUE)
+
+plot(density(customer_data$Annual.Income..k..),
+    col="yellow",
+    main="Density Plot for Annual Income",
+    xlab="Annual Income Class",
+    ylab="Density")
+polygon(density(customer_data$Annual.Income..k..),
+        col="#ccff66")
+
+Analyzing Spending Score of the Customers
+
+summary(customer_data$Spending.Score..1.100.)
+Min. 1st Qu. Median Mean 3rd Qu. Max. 
+## 1.00 34.75 50.00 50.20 73.00 99.00
+boxplot(customer_data$Spending.Score..1.100.,
+   horizontal=TRUE,
+   col="#990000",
+   main="BoxPlot for Descriptive Analysis of Spending Score")
+
+hist(customer_data$Spending.Score..1.100.,
+    main="HistoGram for Spending Score",
+    xlab="Spending Score Class",
+    ylab="Frequency",
+    col="#6600cc",
+    labels=TRUE)
+
+Summing up the K-means clustering –
+
+We specify the number of clusters that we need to create.
+The algorithm selects k objects at random from the dataset. This object is the initial cluster or mean.
+The closest centroid obtains the assignment of a new observation. We base this assignment on the Euclidean Distance between object and the centroid.
+k clusters in the data points update the centroid through calculation of the new mean values present in all the data points of the cluster. 
+The kth cluster’s centroid has a length of p that contains means of all variables for observations in the k-th cluster. 
+We denote the number of variables with p.
+Iterative minimization of the total within the sum of squares.
+Then through the iterative minimization of the total sum of the square, the assignment stop wavering when we achieve maximum iteration. 
+The default value is 10 that the R software uses for the maximum iterations.
+
+Determining Optimal Clusters
+While working with clusters, you need to specify the number of clusters to use. You would like to utilize the optimal number of clusters. To help you in determining the optimal clusters, there are three popular methods –
+
+Elbow method
+Silhouette method
+Gap statistic
+
+library(purrr)
+set.seed(123)
+# function to calculate total intra-cluster sum of square 
+iss <- function(k) {
+  kmeans(customer_data[,3:5],k,iter.max=100,nstart=100,algorithm="Lloyd" )$tot.withinss
+}
+k.values <- 1:10
+iss_values <- map_dbl(k.values, iss)
+plot(k.values, iss_values,
+    type="b", pch = 19, frame = FALSE, 
+    xlab="Number of clusters K",
+    ylab="Total intra-clusters sum of squares")
+
+
+
